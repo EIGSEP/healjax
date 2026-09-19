@@ -855,7 +855,21 @@ def _get_interpol_scalar(theta, phi, nside):
     ])
     return p_out, w_out
 
+def _as_float_coords(theta, phi):
+    """
+    Promote theta/phi to a strong floating dtype.
+
+    Python scalars (and weakly typed traced values) are weakly typed in JAX,
+    so arithmetic against the strongly typed FLOAT_TYPE constants in the
+    kernels would silently demote a float64 coordinate to float32.  Fixing
+    the dtype here keeps float64 inputs float64 and float32 inputs float32.
+    """
+    dtype = jnp.result_type(theta, phi, float)
+    return jnp.asarray(theta, dtype=dtype), jnp.asarray(phi, dtype=dtype)
+
+
 def get_interpol(theta, phi, nside):
+    theta, phi = _as_float_coords(theta, phi)
     # vmap over the scalar interpolation function.
     pix_flat, wgt_flat = jax.vmap(lambda th, ph: _get_interpol_scalar(th, ph, nside), out_axes=1)(theta.ravel(), phi.ravel())
     # Reshape outputs to original input shape with an extra dimension for 4 neighbors.
@@ -995,6 +1009,7 @@ def get_interpol_precomp(theta, phi, nside, ring_table):
 
     pix, wgt = interp(theta, phi)
     """
+    theta, phi = _as_float_coords(theta, phi)
     pix_flat, wgt_flat = jax.vmap(
         lambda th, ph: _get_interpol_scalar_precomp(th, ph, nside, ring_table),
         out_axes=1,

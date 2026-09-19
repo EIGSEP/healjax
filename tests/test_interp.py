@@ -111,6 +111,14 @@ class TestInterpolateMap:
         fd = (f(1.0 + eps) - f(1.0 - eps)) / (2 * eps)
         np.testing.assert_allclose(float(g), float(fd), rtol=1e-3)
 
+    def test_python_scalar_keeps_float64(self):
+        """Weakly typed scalar coordinates must not demote to float32."""
+        m = jnp.asarray(smooth_map(NSIDE, seed=11))
+        scalar = interpolate_map(NSIDE, m, 1.0 + 1e-6, 0.7)
+        array = interpolate_map(NSIDE, m, jnp.float64(1.0 + 1e-6), 0.7)
+        np.testing.assert_allclose(float(scalar), float(array),
+                                   rtol=0, atol=1e-14)
+
     def test_nside_is_static_under_jit(self):
         """A traced nside must be rejected, documenting the static_argnums."""
         m = jnp.asarray(smooth_map(NSIDE, seed=10))
