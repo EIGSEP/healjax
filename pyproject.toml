@@ -32,3 +32,8 @@ Homepage = "https://github.com/AaronParsons/healjax"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# tests/tests.py is the original upstream unittest suite.
+python_files = ["test_*.py", "tests.py"]
