@@ -28,7 +28,7 @@ maps = ["healpy", "astropy", "scipy"]
 test = ["pytest", "healpy", "astropy", "scipy", "astropy-healpix"]
 
 [project.urls]
-Homepage = "https://github.com/AaronParsons/healjax"
+Homepage = "https://github.com/EIGSEP/healjax"
 
 [tool.setuptools.packages.find]
 where = ["src"]
