@@ -7,7 +7,7 @@ These routines are ports of the BSD licensed healpix library https://github.com/
 # Installation
 
 ```
-pip install git+https://github.com/AaronParsons/healjax.git
+pip install healjax
 ```
 
 The low-level pixel functions need only `numpy` and `jax`. The `healjax.maps`
@@ -16,7 +16,7 @@ transforms), `astropy` (FITS I/O) and `scipy` (spherical harmonic fitting);
 install those with the `maps` extra:
 
 ```
-pip install 'healjax[maps] @ git+https://github.com/AaronParsons/healjax.git'
+pip install 'healjax[maps]
 ```
 
 These are imported lazily, so the error only appears if you call a feature
